@@ -2,14 +2,7 @@ package com.hha.clinically.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.Getter;
@@ -26,6 +19,7 @@ public class Doctor {
 		
 	@Id
 	@Column(name = "doc_id") 
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long doc_id;
 	 
 	
@@ -40,16 +34,13 @@ public class Doctor {
     
     @Column(name = "specialization", nullable = true)
     private String specialization;
-
-    /*
-	 * @Column(name = "patientIds", nullable = true)
-	 * 
-	 * @OneToMany(targetEntity=String.class, mappedBy="doctor",
-	 * fetch=FetchType.EAGER) private List<String> patientIds;
-	 */
     
-  
-	
+    @ElementCollection	
+    @CollectionTable(name = "doctor_patients_ids", joinColumns = @JoinColumn(name = "doctor_doc_id"))
+	@Column(name = "patientIds", nullable = true)	
+	private List<String> patientIds;   
+       
+    	
 	public Doctor() {
 		
 	}
@@ -102,6 +93,13 @@ public class Doctor {
 
 	public void setSpecialization(String specialization) {
 		this.specialization = specialization;
+	}
+	
+	public List<String> getPatientIds() {
+		return patientIds;
+	}
+	public void setPatientIds(List<String> patientIds) {
+		this.patientIds = patientIds;
 	}
 
     

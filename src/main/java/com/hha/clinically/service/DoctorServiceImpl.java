@@ -2,7 +2,6 @@ package com.hha.clinically.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +13,7 @@ import com.hha.clinically.repository.DoctorRepository;
 public class DoctorServiceImpl implements DoctorService{
 
 	@Autowired
-	private DoctorRepository repo;
-	
-	 private static final AtomicLong counter = new AtomicLong(2L);
+	private DoctorRepository repo;		
 	
 	@Override
 	public List<Doctor> getAllDoctors() {
@@ -26,8 +23,7 @@ public class DoctorServiceImpl implements DoctorService{
 	}
 
 	@Override
-	public void addDoctor(Doctor doc) {
-		doc.setDocId(counter.incrementAndGet());
+	public void addDoctor(Doctor doc) {		
 		repo.save(doc);		
 	}
 
@@ -47,6 +43,14 @@ public class DoctorServiceImpl implements DoctorService{
 		currentDoctor.setName(updatedDoctor.getName());
 		currentDoctor.setRegNo(updatedDoctor.getRegNo());
 		currentDoctor.setSpecialization(updatedDoctor.getSpecialization());
+		repo.save(currentDoctor);		
+	}
+
+	@Override
+	public void updatePatientsList(List<String> patients, Doctor currentDoctor) {
+		List<String> updatedPatientsList = currentDoctor.getPatientIds();
+		updatedPatientsList.addAll(patients);
+		currentDoctor.setPatientIds(updatedPatientsList);
 		repo.save(currentDoctor);		
 	}
 	
